@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class MainController {
 
+    @GetMapping("/")
+    public String main() {
+        return "index";
+    }
+
 
     @ResponseBody
     @GetMapping("/auth")
