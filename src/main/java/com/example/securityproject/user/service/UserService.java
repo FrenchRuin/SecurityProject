@@ -47,8 +47,7 @@ public class UserService implements UserDetailsService {
                 user.setAuthorities(authorities);
                 save(user);
             } else if (!user.getAuthorities().contains(newRole)) {
-                HashSet<Authority> authorities = new HashSet<>();
-                authorities.addAll(user.getAuthorities());
+                HashSet<Authority> authorities = new HashSet<>(user.getAuthorities());
                 authorities.add(newRole);
                 user.setAuthorities(authorities);
                 save(user);
