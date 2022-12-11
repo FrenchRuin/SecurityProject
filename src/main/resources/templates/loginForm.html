@@ -10,32 +10,32 @@
 <body class="text-center">
 
 <main class="form-control mt-5">
+    <img class="w-50 h-50"
+         th:src="@{https://images.velog.io/images/franc/post/7dcd4b9c-dd51-4ca6-8629-0061aee4870a/security-logo.jpg}"
+         alt="security">
     <form class="w-25 m-auto" th:action="@{/login}" method="post">
         <div class="form-floating">
-            <label for="username" class="sr-only">로그인 아이디</label>
             <input id="username"
                    name="username"
                    class="form-control"
-                   placeholder="아이디를 입력해 주세요."
                    required autofocus>
+            <label for="username">ID</label>
         </div>
-        <div class="form-floating mt-5">
-            <label for="password" class="sr-only">비밀번호</label>
+        <div class="form-floating mt-2">
             <input type="password"
                    id="password"
                    name="password"
                    class="form-control"
-                   placeholder="비밀번호를 입력해 주세요"
                    required>
+            <label for="password">Password</label>
         </div>
         <div class="checkbox mt-2 mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember Information
-            </label>
+            <input type="checkbox" class="form-check-input" id="rememberMe" name="remember-me" checked>
+            <label class="form-check-label" for="rememberMe" aria-describedby="rememberMeHelp">로그인 유지</label>
         </div>
-        <div class="w-100 d-flex">
-            <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
-        </div>
+        <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-light" type="button">Sign Up</button>
+
         <p class="mt-5 mb-3 text-muted">&copy Dev_Lee</p>
     </form>
 </main>

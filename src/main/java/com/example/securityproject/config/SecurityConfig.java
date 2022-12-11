@@ -3,8 +3,6 @@ package com.example.securityproject.config;
 import com.example.securityproject.user.service.UserService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,17 +11,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
 
 @EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-
-    private UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken;
-    private UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter;
-    private RoleHierarchy roleHierarchy;
 
     final AuthDetail authDetail;
     final UserService userService;
@@ -39,9 +35,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         return http
-                .csrf().disable()
                 .authorizeRequests(
                         request -> {
                             request.antMatchers("/auth", "/login").permitAll()
@@ -50,11 +44,11 @@ public class SecurityConfig {
                 ).formLogin(
                         login -> {
                             login.loginPage("/login")
-                                    .defaultSuccessUrl("/auth", false)
                                     .authenticationDetailsSource(authDetail);
                         }
                 )
                 .userDetailsService(userService)
+                .rememberMe(r-> r.key("rememberMe").userDetailsService(userService).tokenRepository(tokenRepository()))
                 .build();
     }
 
@@ -68,8 +62,17 @@ public class SecurityConfig {
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    PersistentTokenRepository tokenRepository() {
+        JdbcTokenRepositoryImpl repository = new JdbcTokenRepositoryImpl();
+        repository.setDataSource(dataSource);
+        return repository;
+    }
+
+
 
 //    @Bean
 //    public InMemoryUserDetailsManager userDetailsManager() {

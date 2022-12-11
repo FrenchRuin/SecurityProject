@@ -3,21 +3,34 @@
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+    <script th:href="@{/js/bootstrap.js}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <title>Main Page</title>
 </head>
 
-<body>
-
+<body class="text-center">
+<img class="w-50 h-50"
+     th:src="@{https://images.velog.io/images/franc/post/7dcd4b9c-dd51-4ca6-8629-0061aee4870a/security-logo.jpg}"
+     alt="security">
 <div sec:authorize="isAuthenticated()">
-    This content is only shown to authenticated users.
+    인증된 사용자
 </div>
 <div sec:authorize="hasAuthority('ROLE_ADMIN')">
-    This content is only shown to administrators.
+    어드민 권한
 </div>
 <div sec:authorize="hasAuthority('ROLE_USER')">
-    This content is only shown to users.
+    유저 권한
 </div>
+
+<form th:action="@{/logout}" method="post">
+    <div class="mt-2">
+        <button type="submit" class="btn btn-success" sec:authorize="isAuthenticated()">LogOut</button>
+    </div>
+    <div class="mt-2">
+        <button type="button" class="btn btn-danger" sec:authorize="isAuthenticated()" th:onclick="|location.href='@{/auth}'|">Auth</button>
+    </div>
+</form>
 
 
 </body>
