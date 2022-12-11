@@ -3,17 +3,17 @@ package com.example.securityproject.config;
 import com.example.securityproject.user.entity.User;
 import com.example.securityproject.user.service.UserService;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Component
 public class DBInitForTest implements InitializingBean {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-
+    public DBInitForTest(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     @Transactional

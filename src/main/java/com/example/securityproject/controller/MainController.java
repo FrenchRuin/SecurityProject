@@ -19,7 +19,6 @@ public class MainController {
         return "loginForm";
     }
 
-
     @ResponseBody
     @GetMapping("/auth")
     public Authentication auth(){
