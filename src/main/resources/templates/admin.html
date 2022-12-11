@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+    <script th:href="@{/js/bootstrap.js}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Main Page</title>
+</head>
+
+<body class="text-center">
+<img class="w-50 h-50"
+     th:src="@{/img/security-logo.jpg}"
+     alt="security">
+
+<div sec:authorize="hasAuthority('ROLE_ADMIN')">
+    어드민 권한
+</div>
+<div class="mt-2">
+    <button type="button" class="btn btn-outline-secondary" sec:authorize="isAuthenticated()"
+            th:onclick="|location.href='@{/}'|">메인페이지
+    </button>
+</div>
+
+</body>
+</html>

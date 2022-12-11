@@ -8,11 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
@@ -32,33 +30,36 @@ public class SecurityConfig {
         this.dataSource = dataSource;
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf().disable()
                 .authorizeRequests(
                         request -> {
-                            request.antMatchers("/auth", "/login").permitAll()
+                            request.antMatchers("/login","/h2-console/**","/static/**").permitAll()
                                     .anyRequest().authenticated();
                         }
                 ).formLogin(
                         login -> {
                             login.loginPage("/login")
+                                    .successHandler(new LoginSuccessHandler())
+                                    .failureHandler(new LoginFailureHandler())
                                     .authenticationDetailsSource(authDetail);
                         }
                 )
+                .logout(logout -> logout.logoutSuccessUrl("/"))
+                .exceptionHandling(e -> e.accessDeniedPage("/access-denied"))
                 .userDetailsService(userService)
-                .rememberMe(r-> r.key("rememberMe").userDetailsService(userService).tokenRepository(tokenRepository()))
+                .rememberMe(r -> r.key("rememberMe").userDetailsService(userService).tokenRepository(tokenRepository()))
                 .build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers(
-                PathRequest.toStaticResources().atCommonLocations(),
-                PathRequest.toH2Console()
-        );
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.ignoring().requestMatchers(
+//                PathRequest.toStaticResources().atCommonLocations()
+//        );
+//    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -71,17 +72,5 @@ public class SecurityConfig {
         repository.setDataSource(dataSource);
         return repository;
     }
-
-
-
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsManager() {
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password(passwordEncoder().encode("1111"))
-//                .roles("USER")
-//                .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
 
 }

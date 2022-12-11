@@ -1,5 +1,6 @@
 package com.example.securityproject.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,24 @@ public class MainController {
         return "loginForm";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @GetMapping("/user")
+    public String user() {
+        return "user";
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin";
+    }
+
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "access-denied";
+    }
+
+    // Authentication Information.
     @ResponseBody
     @GetMapping("/auth")
     public Authentication auth(){
