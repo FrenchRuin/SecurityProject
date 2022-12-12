@@ -1,12 +1,12 @@
 package com.example.securityproject.config;
 
 import com.example.securityproject.user.service.UserService;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,6 +28,13 @@ public class SecurityConfig {
         this.authDetail = authDetail;
         this.userService = userService;
         this.dataSource = dataSource;
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+        return roleHierarchy;
     }
 
     @Bean
@@ -53,13 +60,17 @@ public class SecurityConfig {
                 .rememberMe(r -> r.key("rememberMe").userDetailsService(userService).tokenRepository(tokenRepository()))
                 .build();
     }
+/*
+    Not recommend
 
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return web -> web.ignoring().requestMatchers(
-//                PathRequest.toStaticResources().atCommonLocations()
-//        );
-//    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(
+                PathRequest.toStaticResources().atCommonLocations()
+        );
+    }
+**/
+
 
     @Bean
     PasswordEncoder passwordEncoder() {

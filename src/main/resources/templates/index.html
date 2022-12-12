@@ -10,27 +10,30 @@
 </head>
 
 <body class="text-center">
-<img class="w-50 h-50" th:src="@{/img/security-logo.jpg}" alt="security">
-<div>
-    <a th:href="@{/user}">유저페이지</a>
-    <a th:href="@{/admin}">어드민페이지</a>
-</div>
-<form th:action="@{/logout}" method="post">
-    <div class="mt-2">
-        <button type="submit" class="btn btn-success" sec:authorize="isAuthenticated()">LogOut</button>
+<img class="w-50 h-50" th:src="@{/img/security-logo.jpg}" alt="security" src="#">
+<div class="mb-3">
+    <div>
+        <a class="btn btn-outline-secondary" th:href="@{/user}">유저페이지</a>
+        <a class="btn btn-outline-secondary" th:href="@{/admin}">관리자페이지</a>
     </div>
-</form>
-<div class="mt-2">
-    <button type="button" class="btn btn-danger" sec:authorize="isAuthenticated()"
-            th:onclick="|location.href='@{/auth}'|">Auth
-    </button>
 </div>
-<div class="mt-2">
-    <button type="button" class="btn btn-info" sec:authorize="isAuthenticated()"
-            th:onclick="|location.href='@{/h2-console}'|">H2 DB
-    </button>
+<div class="w-25 m-auto d-flex justify-content-evenly">
+    <form th:action="@{/logout}" method="post">
+        <div class="mt-2">
+            <button type="submit" class="btn btn-success" sec:authorize="isAuthenticated()">LogOut</button>
+        </div>
+    </form>
+    <div class="mt-2">
+        <button type="button" class="btn btn-danger" sec:authorize="isAuthenticated()"
+                th:onclick="|location.href='@{/auth}'|">Auth
+        </button>
+    </div>
+    <div class="mt-2">
+        <button type="button" class="btn btn-info" sec:authorize="isAuthenticated()"
+                th:onclick="|location.href='@{/h2-console}'|">H2 DB
+        </button>
+    </div>
 </div>
-
 
 </body>
 </html>

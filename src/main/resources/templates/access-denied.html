@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
     <script th:href="@{/js/bootstrap.js}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <title>Main Page</title>
+    <title>No Authority</title>
 </head>
 
 <body class="text-center">
@@ -15,7 +15,7 @@
      alt="security">
 
 <div>
-    권한이 없습니다.
+   <p class="fw-bold text-primary">권한이 없습니다.</p>
 </div>
 <div class="mt-2">
     <button type="button" class="btn btn-outline-secondary" sec:authorize="isAuthenticated()"
