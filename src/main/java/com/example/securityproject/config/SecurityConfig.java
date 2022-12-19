@@ -2,6 +2,7 @@ package com.example.securityproject.config;
 
 import com.example.securityproject.user.service.UserService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 
 import javax.sql.DataSource;
 
+@Order(1) // For TestSecurityConfig
 @EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
